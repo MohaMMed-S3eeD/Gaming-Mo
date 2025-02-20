@@ -19,7 +19,7 @@ const CardInfo = ({
   return (
     <MotionItem
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
+      animate={{ opacity: 1, y: 0 }}
       className=" flex flex-col items-start absolute left-20 top-20 max-w-md"
     >
       <div className=" w-96 h-40 relative">
