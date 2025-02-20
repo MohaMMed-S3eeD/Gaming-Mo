@@ -34,7 +34,7 @@ export const NAV_LINKS = [
 ];
 const SideBar = () => {
   return (
-    <div className="w-full m-5 ">
+    <div className="w-50 m-5 sticky inset-0 h-full min-h-screen ">
       <Logo/>
       {NAV_LINKS.map((nav, index) => (
         <NavLink nav={nav} key={index} />

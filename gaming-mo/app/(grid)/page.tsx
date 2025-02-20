@@ -7,14 +7,14 @@ import CardInfo from "@/components/CardInfo";
 
 const Hero = () => {
   return (
-    <div className=" h-full mt-8">
+    <div className="  mt-8">
       <SwiperCards
         className=" h-[30rem]"
         paginationImages
         items={[
           {
             card: (
-              <div className=" flex items-start justify-start w-full h-full relative">
+              <div className=" flex items-start justify-start w-full  relative">
                 <video
                   className=" absolute w-full h-full object-cover rounded-2xl  inset-0"
                   autoPlay={true}
@@ -96,7 +96,7 @@ const Hero = () => {
           },
         ]}
       />
-      
+      <div className="h-[1000px]"></div>
     </div>
   );
 };

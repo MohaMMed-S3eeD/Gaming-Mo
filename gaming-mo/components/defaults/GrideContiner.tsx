@@ -21,7 +21,7 @@ const GrideContiner = ({
     11: "grid-cols-11",
     12: "grid-cols-12",
   };
-  return <main className={`${gridClass[cols]} h-screen grid`}>{children}</main>;
+  return <main className={`${gridClass[cols]}  grid`}>{children}</main>;
 };
 
 export default GrideContiner;

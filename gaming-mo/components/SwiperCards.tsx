@@ -38,7 +38,7 @@ const SwiperCards = ({
   }, [swiper]);
 
   return (
-    <div className="relative h-full gap-3 w-full flex flex-col">
+    <div className="relative  gap-3 w-full flex flex-col">
       <Swiper
         autoplay={{ delay: 3000 }}
         modules={[Autoplay]}
