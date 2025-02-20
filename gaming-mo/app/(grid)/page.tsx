@@ -14,7 +14,7 @@ const Hero = () => {
         items={[
           {
             card: (
-              <div className=" flex items-start justify-start w-full  relative">
+              <div className=" flex items-start justify-start w-full h-full  relative">
                 <video
                   className=" absolute w-full h-full object-cover rounded-2xl  inset-0"
                   autoPlay={true}
