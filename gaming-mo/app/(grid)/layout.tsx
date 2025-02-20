@@ -1,4 +1,7 @@
 import GrideContiner from "@/components/defaults/GrideContiner";
+import MaxWidthWrapper from "@/components/defaults/MaxWidthWrapper";
+import Nav from "@/components/Nav/Nav";
+import SideBar from "@/components/Nav/SideBar";
 
 export default function RootLayout({
   children,
@@ -6,10 +9,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="h-screen">
+    <main className=" background h-screen">
       <GrideContiner cols={12}>
-        <div className=" col-span-2 bg-red-500 text-1xl">Gaming Mo</div>
-        <div className="col-span-10 bg-slate-300 ">{children}</div>
+        <div className="bg-black/30  sticky inset-0 hidden lg:flex lg:col-span-3 xl:col-span-2 text-1xl ">
+          <SideBar />
+        </div>
+
+        <MaxWidthWrapper className="col-span-12 lg:col-span-9 xl:col-span-10 ">
+          <Nav/>
+          {children}
+        </MaxWidthWrapper>
       </GrideContiner>
     </main>
   );
