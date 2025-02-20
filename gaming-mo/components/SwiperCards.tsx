@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { ReactElement, ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type SwiperType from "swiper";
