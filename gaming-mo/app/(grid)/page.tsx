@@ -1,11 +1,15 @@
 import React from "react";
+import { searchGames } from "@/app/api/api";
 // import MaxWidthWrapper from "@/components/defaults/MaxWidthWrapper";
 import SwiperCards from "@/components/SwiperCards";
 import "swiper/css";
 import Image from "next/image";
 import CardInfo from "@/components/CardInfo";
-
-const Hero = () => {
+import Link from "next/link";
+const Hero = async () => {
+  const { data } = await searchGames("", 1, [], 10);
+  const games = data.results;
+  console.log(games);
   return (
     <div className="  mt-8">
       <SwiperCards
@@ -42,7 +46,10 @@ const Hero = () => {
                   muted={true}
                   loop={true}
                 >
-                  <source type="video/mp4" src="/call-of-duty-black-ops-6-animated-hero-mobile-01-en-22may24.mp4" />
+                  <source
+                    type="video/mp4"
+                    src="/call-of-duty-black-ops-6-animated-hero-mobile-01-en-22may24.mp4"
+                  />
                 </video>
                 <CardInfo
                   btnClasses="  text-white bg-orange-500 hover:bg-orange-400"
@@ -82,7 +89,10 @@ const Hero = () => {
                   muted={true}
                   loop={true}
                 >
-                  <source type="video/mp4" src="/cyberpunk-2077-phantom-liberty-video-hero-01-en-11sep23.mp4" />
+                  <source
+                    type="video/mp4"
+                    src="/cyberpunk-2077-phantom-liberty-video-hero-01-en-11sep23.mp4"
+                  />
                 </video>{" "}
                 <CardInfo
                   btnClasses=" text-white z-20 bg-red-500 hover:bg-red-400"
@@ -96,7 +106,36 @@ const Hero = () => {
           },
         ]}
       />
-      <div className="h-[1000px]"></div>
+
+      <SwiperCards
+        className="mt-8 "
+        slidesPerView={4}
+        items={games.map((game: Game) => ({
+          card: (
+            <div 
+              key={game.id}
+              className=" backdrop-blur-lg bg-red-500/10 rounded-2xl p-4 shadow-lg hover:scale-105 transition-transform duration-300"
+            >
+              <Link href={`/game/${game.id}`}>
+              <div className="relative w-full h-56 overflow-hidden rounded-lg ">
+                <Image
+                  src={game.background_image}
+                  alt={game.name}
+                  width={400}
+                  height={250}
+                  className="object-cover w-full h-full rounded-lg "
+                />
+                <div className="absolute inset-0 bg-black/30 hover:bg-black/50 transition duration-300"></div>
+              </div>
+              </Link>
+              <h1 className="truncate mt-3 text-lg font-bold text-white text-center">
+                {game.name}
+              </h1>
+            </div>
+          ),
+          src: game.background_image,
+        }))}
+      />
     </div>
   );
 };
