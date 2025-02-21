@@ -6,6 +6,12 @@ import "swiper/css";
 import Image from "next/image";
 import CardInfo from "@/components/CardInfo";
 import Link from "next/link";
+type Game = {
+  id: number;
+  name: string;
+  background_image: string;
+};
+
 const Hero = async () => {
   const { data } = await searchGames("", 1, [], 10);
   const games = data.results;

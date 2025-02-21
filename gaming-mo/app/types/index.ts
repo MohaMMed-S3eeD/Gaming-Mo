@@ -1,4 +1,4 @@
-interface Game {
+export interface Game {
   id: number;
   slug: string;
   name: string;
@@ -17,7 +17,7 @@ interface Game {
   playtime: number;
   suggestions_count: number;
   updated: string;
-  user_game: any | null;
+  user_game: UserGame | null;
   reviews_count: number;
   saturated_color: string;
   dominant_color: string;
@@ -29,6 +29,11 @@ interface Game {
   tags: Tag[];
   esrb_rating: EsrbRating | null;
   short_screenshots: Screenshot[];
+}
+
+export interface GameFilter {
+  filterName: string;
+  option: string;
 }
 
 interface Rating {
@@ -93,4 +98,10 @@ interface EsrbRating {
 interface Screenshot {
   id: number;
   image: string;
+}
+
+interface UserGame {
+  playtime: number;
+  status: string;
+  rating?: number;
 }

@@ -1,16 +1,19 @@
 import { APIURL, KEY } from "@/app/constants";
+import { GameFilter } from "@/app/types";
+
 const fetchFn = (url: string, cache?: number) =>
   fetch(url, { next: { revalidate: cache || 3600 } }).then((res) => res.json());
+
 export const searchGames = async function (
   query?: string,
   page = 1,
-  filters?: { filterName: string; option: string }[],
+  filters?: GameFilter[],
   page_size = 20,
   cache: number = 0
 ) {
   const data = await fetchFn(
     `${APIURL}games?search=${query}&page_size=${page_size}&page=${page}&${filters
-      ?.map((filter: any) => `${filter.filterName}=${filter.option}&`)
+      ?.map((filter: GameFilter) => `${filter.filterName}=${filter.option}&`)
       .join("")}&key=${KEY}`,
     cache
   );
