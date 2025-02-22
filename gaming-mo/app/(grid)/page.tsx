@@ -1,3 +1,6 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import React from "react";
 import { getGamesByIds, searchGames } from "@/app/api/api";
 // import MaxWidthWrapper from "@/components/defaults/MaxWidthWrapper";
@@ -7,9 +10,9 @@ import Image from "next/image";
 import CardInfo from "@/components/CardInfo";
 
 import GamesSwiper from "@/components/GamesSwiper";
+import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 
-
-const Hero = async () => {
+const Page = async () => {
   const data = await searchGames("", 2, [], 9);
   const ps5 = await searchGames(
     "",
@@ -40,6 +43,8 @@ const Hero = async () => {
   ]);
   console.log(customGames);
   
+  const { value: wishlist = [], setValue: setWishlist, isLoaded } = useLocalStorage<string[]>("gamesWishlist", []);
+
   return (
     <div className="  mt-8">
       <SwiperCards
@@ -154,4 +159,6 @@ const Hero = async () => {
   );
 };
 
-export default Hero;
+const ClientOnlyPage = dynamic(() => Promise.resolve(Page), { ssr: false });
+
+export default ClientOnlyPage;
