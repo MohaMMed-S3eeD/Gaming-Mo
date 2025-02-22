@@ -20,27 +20,29 @@ const Page = () => {
   const { value: wishlist = [], setValue: setWishlist, isLoaded } = useLocalStorage<string[]>("gamesWishlist", []);
 
   useEffect(() => {
+    if (!isLoaded) return;
+    
+    let mounted = true;
     const fetchGames = async () => {
-      if (!isLoaded) return;
-      
       setIsLoading(true);
       try {
-        if (!wishlist || wishlist.length === 0) {
-          setGames([]);
+        if (!wishlist?.length) {
+          if (mounted) setGames([]);
           return;
         }
 
         const data = await getGamesByIds(wishlist);
-        setGames(data || []);
+        if (mounted) setGames(data || []);
       } catch (error) {
         console.error("Error fetching wishlist:", error);
-        setGames([]);
+        if (mounted) setGames([]);
       } finally {
-        setIsLoading(false);
+        if (mounted) setIsLoading(false);
       }
     };
 
     fetchGames();
+    return () => { mounted = false; };
   }, [wishlist, isLoaded]);
 
   const handleDel = (gameId: string) => {
