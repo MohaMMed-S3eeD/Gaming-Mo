@@ -19,9 +19,11 @@ const Page = () => {
   const [isClient, setIsClient] = useState(false);
 
   const fetchWishlistGames = useCallback(async () => {
+    if (typeof window === 'undefined') return;
+    
     setIsLoading(true);
     try {
-      const storedWishlist = localStorage.getItem("gamesWishlist");
+      const storedWishlist = window.localStorage.getItem("gamesWishlist");
       const wishlistIds = storedWishlist ? JSON.parse(storedWishlist) : [];
       
       if (wishlistIds.length === 0) {
@@ -33,6 +35,7 @@ const Page = () => {
       setGames(data);
     } catch (error) {
       console.error("Error fetching wishlist:", error);
+      setGames([]);
     } finally {
       setIsLoading(false);
     }
@@ -44,15 +47,14 @@ const Page = () => {
   }, [fetchWishlistGames]);
 
   const handleDel = (gameId: string) => {
+    if (typeof window === 'undefined') return;
+
     try {
-      const storedWishlist = localStorage.getItem("gamesWishlist");
+      const storedWishlist = window.localStorage.getItem("gamesWishlist");
       const currentWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
       const newWishlist = currentWishlist.filter((id: string) => id !== gameId);
       
-      // Update localStorage
-      localStorage.setItem("gamesWishlist", JSON.stringify(newWishlist));
-      
-      // Update UI immediately
+      window.localStorage.setItem("gamesWishlist", JSON.stringify(newWishlist));
       setGames(prevGames => prevGames.filter(game => game?.data?.id !== gameId));
     } catch (error) {
       console.error("Error removing game:", error);
