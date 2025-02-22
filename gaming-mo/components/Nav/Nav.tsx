@@ -2,7 +2,7 @@
 import React from "react";
 
 import Button from "../btn";
-import Input from "../ui/input";
+import Input from "../input";
 
 const Nav = () => {
   return (
@@ -10,8 +10,8 @@ const Nav = () => {
       <Input />
 
       <div className="flex space-x-4">
-        <Button link="/games" name={"Log in"} />
-        <Button link="sin up" name={"Sin Up"} />
+        <Button link="/Login" name={"Log in"} />
+        <Button link="/SignUp" name={"Sin Up"} />
       </div>
     </div>
   );

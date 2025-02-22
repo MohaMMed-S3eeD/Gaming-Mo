@@ -1,0 +1,90 @@
+import React from "react";
+import SwiperCards from "./SwiperCards";
+import Image from "next/image";
+import Link from "next/link";
+import { Game } from "@/app/types";
+
+const GamesSwiper = ({
+  games,
+  title,
+  slidesPerView,
+  big,
+}: {
+  games: Game[];
+  title: string;
+  slidesPerView?: number;
+  big?: boolean;
+}) => {
+  return (
+    <div>
+      <h1 className=" mt-8 text-2xl ">{title}</h1>
+      <SwiperCards
+        className="mt-8 "
+        slidesPerView={slidesPerView || 4}
+        items={games.map((game: Game) => ({
+          card: big ? (
+            <div
+              key={game.id}
+              className="flex flex-col md:flex-row items-center backdrop-blur-lg bg-gradient-to-br from-red-500/20 to-purple-500/20 rounded-2xl p-6 shadow-lg hover:scale-105 transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-red-500/20 border border-red-500/10"
+            >
+              <div className="flex-shrink-0 transform perspective-1000">
+                <Link href={`/game/${game.id}`}>
+                  <div className="relative w-44 h-44 md:w-64 md:h-64 overflow-hidden rounded-xl group">
+                    <Image
+                      src={game.background_image}
+                      alt={game.name}
+                      width={400}
+                      height={250}
+                      className="object-cover w-full h-full rounded-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-2"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/80 transition-all duration-500"></div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                      <p className="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500">Click to view details</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+              <div className="flex flex-col md:ml-8 mt-6 md:mt-0 max-w-xl">
+                <h1 className="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-400 hover:from-red-300 hover:to-purple-300 transition-all duration-300 text-center md:text-left">
+                  {game.name}
+                </h1>
+                <p className="text-sm md:text-base text-gray-300 mt-4 line-clamp-3 overflow-hidden">
+                  {game.description_raw}
+                </p>
+                <div className="h-1 w-20 bg-gradient-to-r from-red-500 to-purple-500 rounded-full mt-4 self-start"></div>
+              </div>
+            </div>
+          ) : (
+            <div
+              key={game.id}
+              className="backdrop-blur-lg bg-gradient-to-br from-red-500/10 to-purple-500/10 rounded-2xl p-4 shadow-lg hover:scale-105 transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-red-500/20 border border-red-500/10"
+            >
+              <Link href={`/game/${game.id}`}>
+                <div className="relative w-full h-56 overflow-hidden rounded-lg group">
+                  <Image
+                    src={game.background_image}
+                    alt={game.name}
+                    width={400}
+                    height={250}
+                    className="object-cover w-full h-full rounded-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-1"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/80 transition-all duration-500">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                      <p className="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500">View details</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+              <h1 className="truncate mt-3 text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-400 hover:from-red-300 hover:to-purple-300 transition-all duration-300 text-center">
+                {game.name}
+              </h1>
+            </div>
+          ),
+          src: game.background_image,
+        }))}
+      />
+    </div>
+  );
+};
+
+export default GamesSwiper;

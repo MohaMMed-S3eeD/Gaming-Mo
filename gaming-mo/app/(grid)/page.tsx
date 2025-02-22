@@ -1,21 +1,44 @@
 import React from "react";
-import { searchGames } from "@/app/api/api";
+import { getGamesByIds, searchGames } from "@/app/api/api";
 // import MaxWidthWrapper from "@/components/defaults/MaxWidthWrapper";
 import SwiperCards from "@/components/SwiperCards";
 import "swiper/css";
 import Image from "next/image";
 import CardInfo from "@/components/CardInfo";
-import Link from "next/link";
-type Game = {
-  id: number;
-  name: string;
-  background_image: string;
-};
+
+import GamesSwiper from "@/components/GamesSwiper";
+
 
 const Hero = async () => {
-  const { data } = await searchGames("", 1, [], 10);
-  const games = data.results;
-  console.log(games);
+  const data = await searchGames("", 2, [], 9);
+  const ps5 = await searchGames(
+    "",
+    1,
+    [
+      { filterName: "platforms", option: "187" },
+      {
+        filterName: "ordering",
+        option: "-metacritic",
+      },
+    ],
+    10
+  );
+  const pc = await searchGames(
+    "",
+    1,
+    [{ filterName: "platforms", option: "4" }],
+    10
+  );
+  const { results } = data.data;
+  const customGames = await getGamesByIds([
+    "799265",
+    "58550",
+    "2462",
+    "494384",
+    "452642",
+    "452634",
+  ]);
+  
   return (
     <div className="  mt-8">
       <SwiperCards
@@ -113,34 +136,18 @@ const Hero = async () => {
         ]}
       />
 
-      <SwiperCards
-        className="mt-8 "
-        slidesPerView={4}
-        items={games.map((game: Game) => ({
-          card: (
-            <div 
-              key={game.id}
-              className=" backdrop-blur-lg bg-red-500/10 rounded-2xl p-4 shadow-lg hover:scale-105 transition-transform duration-300"
-            >
-              <Link href={`/game/${game.id}`}>
-              <div className="relative w-full h-56 overflow-hidden rounded-lg ">
-                <Image
-                  src={game.background_image}
-                  alt={game.name}
-                  width={400}
-                  height={250}
-                  className="object-cover w-full h-full rounded-lg "
-                />
-                <div className="absolute inset-0 bg-black/30 hover:bg-black/50 transition duration-300"></div>
-              </div>
-              </Link>
-              <h1 className="truncate mt-3 text-lg font-bold text-white text-center">
-                {game.name}
-              </h1>
-            </div>
-          ),
-          src: game.background_image,
-        }))}
+      <GamesSwiper  slidesPerView={4} title="Top Games for PS5" games={ps5.data.results} />
+      <GamesSwiper slidesPerView={3} title="Top Games" games={results} />
+      <GamesSwiper
+        big
+        slidesPerView={1}
+        title="PLAYSTATION EXCLUSIVES"
+        games={customGames.map((game) => game.data)}
+      />
+      <GamesSwiper
+        slidesPerView={2}
+        title="Top PC Games"
+        games={pc.data.results}
       />
     </div>
   );
