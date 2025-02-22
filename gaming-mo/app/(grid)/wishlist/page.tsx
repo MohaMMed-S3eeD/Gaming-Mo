@@ -5,8 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState, useCallback } from "react";
 
+interface Game {
+  data: {
+    id: string;
+    name: string;
+    background_image: string;
+  }
+}
+
 const Page = () => {
-  const [games, setGames] = useState<any[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
 
