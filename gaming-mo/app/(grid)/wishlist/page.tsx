@@ -1,9 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { getGamesByIds } from "@/app/api/api";
+import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Game {
   data: {
@@ -16,52 +18,41 @@ interface Game {
 const Page = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
-
-  const fetchWishlistGames = useCallback(async () => {
-    if (typeof window === 'undefined') return;
-    
-    setIsLoading(true);
-    try {
-      const storedWishlist = window.localStorage.getItem("gamesWishlist");
-      const wishlistIds = storedWishlist ? JSON.parse(storedWishlist) : [];
-      
-      if (wishlistIds.length === 0) {
-        setGames([]);
-        return;
-      }
-
-      const data = await getGamesByIds(wishlistIds);
-      setGames(data);
-    } catch (error) {
-      console.error("Error fetching wishlist:", error);
-      setGames([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const { value: wishlist = [], setValue: setWishlist, isLoaded } = useLocalStorage<string[]>("gamesWishlist", []);
 
   useEffect(() => {
-    setIsClient(true);
-    fetchWishlistGames();
-  }, [fetchWishlistGames]);
+    if (!isLoaded || typeof window === 'undefined') return; // Ensure this runs only on the client side
+    
+    let mounted = true;
+    const fetchGames = async () => {
+      setIsLoading(true);
+      try {
+        if (!wishlist?.length) {
+          if (mounted) setGames([]);
+          return;
+        }
+
+        const data = await getGamesByIds(wishlist);
+        if (mounted) setGames(data || []);
+      } catch (error) {
+        console.error("Error fetching wishlist:", error);
+        if (mounted) setGames([]);
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    fetchGames();
+    return () => { mounted = false; };
+  }, [wishlist, isLoaded]);
 
   const handleDel = (gameId: string) => {
-    if (typeof window === 'undefined') return;
-
-    try {
-      const storedWishlist = window.localStorage.getItem("gamesWishlist");
-      const currentWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
-      const newWishlist = currentWishlist.filter((id: string) => id !== gameId);
-      
-      window.localStorage.setItem("gamesWishlist", JSON.stringify(newWishlist));
-      setGames(prevGames => prevGames.filter(game => game?.data?.id !== gameId));
-    } catch (error) {
-      console.error("Error removing game:", error);
-    }
+    const newWishlist = (wishlist || []).filter(id => id !== gameId);
+    setWishlist(newWishlist);
+    setGames(prevGames => prevGames.filter(game => game?.data?.id !== gameId));
   };
 
-  if (!isClient) return null;
+  if (!isLoaded) return null;
   if (isLoading) return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-red-500 border-opacity-50"></div>
@@ -121,4 +112,6 @@ const Page = () => {
   );
 };
 
-export default Page;
+const ClientOnlyPage = dynamic(() => Promise.resolve(Page), { ssr: false });
+
+export default ClientOnlyPage;
