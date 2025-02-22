@@ -6,6 +6,8 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return; // Ensure this runs only on the client side
+
     try {
       const item = browserStorage.get(key);
       if (item !== null) {
@@ -19,6 +21,8 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   }, [key]);
 
   const setValue = (value: T) => {
+    if (typeof window === 'undefined') return; // Ensure this runs only on the client side
+
     try {
       setStoredValue(value);
       browserStorage.set(key, JSON.stringify(value));

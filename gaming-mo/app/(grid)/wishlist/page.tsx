@@ -20,7 +20,7 @@ const Page = () => {
   const { value: wishlist = [], setValue: setWishlist, isLoaded } = useLocalStorage<string[]>("gamesWishlist", []);
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || typeof window === 'undefined') return; // Ensure this runs only on the client side
     
     let mounted = true;
     const fetchGames = async () => {
