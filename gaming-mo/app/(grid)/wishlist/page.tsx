@@ -103,7 +103,7 @@ const Page = () => {
         ) : (
           <div className="col-span-full text-center py-8">
             <p className="text-xl text-gray-400 font-medium">
-              Your wishlist is empty. Start adding some games!!
+              Your wishlist is empty. Start adding some games!
             </p>
           </div>
         )}
