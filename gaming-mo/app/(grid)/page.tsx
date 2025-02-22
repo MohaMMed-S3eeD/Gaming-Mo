@@ -38,6 +38,7 @@ const Hero = async () => {
     "452642",
     "452634",
   ]);
+  console.log(customGames);
   
   return (
     <div className="  mt-8">

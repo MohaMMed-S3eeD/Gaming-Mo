@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import SwiperCards from "./SwiperCards";
 import Image from "next/image";
 import Link from "next/link";
 import { Game } from "@/app/types";
+import { Button } from "./ui/button";
 
 const GamesSwiper = ({
   games,
@@ -15,11 +17,30 @@ const GamesSwiper = ({
   slidesPerView?: number;
   big?: boolean;
 }) => {
+  const [gamesWishlist, setGamesWishlist] = useState<number[]>(() => {
+    // تحميل البيانات من localStorage عند تشغيل الكومبوننت
+    const storedWishlist = localStorage.getItem("gamesWishlist");
+    return storedWishlist ? JSON.parse(storedWishlist) : [];
+  });
+
+  const handleClick = (id: number) => {
+    setGamesWishlist((prevWishlist) =>
+      prevWishlist.includes(id)
+        ? prevWishlist.filter((game) => game !== id)
+        : [...prevWishlist, id]
+    );
+  };
+
+  // حفظ البيانات في localStorage كل ما تتغير
+  useEffect(() => {
+   global?.window.localStorage.setItem("gamesWishlist", JSON.stringify(gamesWishlist));
+  }, [gamesWishlist]);
+
   return (
     <div>
-      <h1 className=" mt-8 text-2xl ">{title}</h1>
+      <h1 className="mt-8 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-purple-500">{title}</h1>
       <SwiperCards
-        className="mt-8 "
+        className="mt-8"
         slidesPerView={slidesPerView || 4}
         items={games.map((game: Game) => ({
           card: big ? (
@@ -39,10 +60,38 @@ const GamesSwiper = ({
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/80 transition-all duration-500"></div>
                     <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                      <p className="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500">Click to view details</p>
+                      <p className="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        Click to view details
+                      </p>
                     </div>
                   </div>
                 </Link>
+                <Button
+                  onClick={() => handleClick(game.id)}
+                  className={`mt-4 w-full transition-all duration-300 ${
+                    gamesWishlist.includes(game.id)
+                      ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400'
+                      : 'bg-purple-500/20 hover:bg-purple-500/30 text-purple-400'
+                  }`}
+                >
+                  <span className="flex items-center gap-1 text-sm">
+                    {gamesWishlist.includes(game.id) ? (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                        <span className="truncate">Remove</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                        </svg>
+                        <span className="truncate">Add to Wishlist</span>
+                      </>
+                    )}
+                  </span>
+                </Button>
               </div>
               <div className="flex flex-col md:ml-8 mt-6 md:mt-0 max-w-xl">
                 <h1 className="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-400 hover:from-red-300 hover:to-purple-300 transition-all duration-300 text-center md:text-left">
@@ -70,7 +119,9 @@ const GamesSwiper = ({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/80 transition-all duration-500">
                     <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                      <p className="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500">View details</p>
+                      <p className="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        View details
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -78,6 +129,32 @@ const GamesSwiper = ({
               <h1 className="truncate mt-3 text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-400 hover:from-red-300 hover:to-purple-300 transition-all duration-300 text-center">
                 {game.name}
               </h1>
+              <Button
+                onClick={() => handleClick(game.id)}
+                className={`mt-4 w-full transition-all duration-300 ${
+                  gamesWishlist.includes(game.id)
+                    ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400'
+                    : 'bg-purple-500/20 hover:bg-purple-500/30 text-purple-400'
+                }`}
+              >
+                <span className="flex items-center gap-1 text-sm justify-center">
+                  {gamesWishlist.includes(game.id) ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                      <span className="truncate">Remove</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                      </svg>
+                      <span className="truncate">Add to Wishlist</span>
+                    </>
+                  )}
+                </span>
+              </Button>
             </div>
           ),
           src: game.background_image,
