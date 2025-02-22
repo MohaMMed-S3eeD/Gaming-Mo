@@ -6,7 +6,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 
   useEffect(() => {
     try {
-      const item = window.localStorage.getItem(key);
+      const item = globalThis.window.localStorage.getItem(key);
       setStoredValue(item ? JSON.parse(item) : initialValue);
     } catch (error) {
       console.error(error);
@@ -19,7 +19,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   const setValue = (value: T) => {
     try {
       setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
+      globalThis.window.localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       console.error(error);
     }
