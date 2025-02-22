@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { getGamesByIds } from "@/app/api/api";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import Image from "next/image";
@@ -111,4 +112,6 @@ const Page = () => {
   );
 };
 
-export default Page;
+const ClientOnlyPage = dynamic(() => Promise.resolve(Page), { ssr: false });
+
+export default ClientOnlyPage;
