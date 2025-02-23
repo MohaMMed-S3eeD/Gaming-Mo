@@ -19,6 +19,7 @@ const Page = () => {
   const [isClient, setIsClient] = useState(false);
 
   const fetchWishlistGames = useCallback(async () => {
+    if (typeof window === "undefined") return; // Ensure this runs only on the client side
     setIsLoading(true);
     try {
       const storedWishlist = localStorage.getItem("gamesWishlist");
@@ -44,6 +45,7 @@ const Page = () => {
   }, [fetchWishlistGames]);
 
   const handleDel = (gameId: string) => {
+    if (typeof window === "undefined") return; // Ensure this runs only on the client side
     try {
       const storedWishlist = localStorage.getItem("gamesWishlist");
       const currentWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
