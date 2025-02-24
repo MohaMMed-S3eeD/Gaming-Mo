@@ -8,7 +8,6 @@ import CardInfo from "@/components/CardInfo";
 
 import GamesSwiper from "@/components/GamesSwiper";
 
-
 const Hero = async () => {
   const data = await searchGames("", 2, [], 9);
   const ps5 = await searchGames(
@@ -136,18 +135,20 @@ const Hero = async () => {
         ]}
       />
 
-      <GamesSwiper  slidesPerView={4} title="Top Games for PS5" games={ps5.data.results} />
-      <GamesSwiper slidesPerView={3} title="Top Games" games={results} />
+      <GamesSwiper  slidesPerView={4} title="Top Games for PS5" games={ps5.data.results} isLoading={!ps5.data.results} />
+      <GamesSwiper slidesPerView={3} title="Top Games" games={results} isLoading={!results} />
       <GamesSwiper
         big
         slidesPerView={1}
         title="PLAYSTATION EXCLUSIVES"
         games={customGames.map((game) => game.data)}
+        isLoading={!customGames}
       />
       <GamesSwiper
         slidesPerView={2}
         title="Top PC Games"
         games={pc.data.results}
+        isLoading={!pc.data.results}
       />
     </div>
   );
