@@ -19,11 +19,11 @@ const Page = () => {
   const [isClient, setIsClient] = useState(false);
 
   const fetchWishlistGames = useCallback(async () => {
-    if (typeof window === "undefined") return; // Ensure this runs only on the client side
     setIsLoading(true);
     try {
-      const storedWishlist = localStorage.getItem("gamesWishlist");
-      const wishlistIds = storedWishlist ? JSON.parse(storedWishlist) : [];
+      // Fetch wishlist IDs from our API
+      const response = await fetch('/api/wishlist');
+      const { games: wishlistIds } = await response.json();
       
       if (wishlistIds.length === 0) {
         setGames([]);
@@ -44,15 +44,16 @@ const Page = () => {
     fetchWishlistGames();
   }, [fetchWishlistGames]);
 
-  const handleDel = (gameId: string) => {
-    if (typeof window === "undefined") return; // Ensure this runs only on the client side
+  const handleDel = async (gameId: string) => {
     try {
-      const storedWishlist = localStorage.getItem("gamesWishlist");
-      const currentWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
-      const newWishlist = currentWishlist.filter((id: string) => id !== gameId);
-      
-      // Update localStorage
-      localStorage.setItem("gamesWishlist", JSON.stringify(newWishlist));
+      // Delete from API
+      await fetch('/api/wishlist', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ gameId }),
+      });
       
       // Update UI immediately
       setGames(prevGames => prevGames.filter(game => game?.data?.id !== gameId));
