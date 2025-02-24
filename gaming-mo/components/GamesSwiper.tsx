@@ -16,10 +16,15 @@ const GamesSwiper = ({
   slidesPerView?: number;
   big?: boolean;
 }) => {
- 
-
-
-  // حفظ البيانات في localStorage كل ما تتغير
+  // Add null check for games
+  if (!games || games.length === 0) {
+    return (
+      <div className="mt-8">
+        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-purple-500">{title}</h1>
+        <div className="mt-8 text-gray-400">No games available</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -117,7 +122,7 @@ const GamesSwiper = ({
                  
                     <>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                       </svg>
                       <span className="truncate">Add to Wishlist</span>
                     </>
@@ -127,7 +132,7 @@ const GamesSwiper = ({
             </div>
           ),
           src: game.background_image,
-        }))}
+        }))} 
       />
     </div>
   );
