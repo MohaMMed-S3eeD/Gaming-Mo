@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Game } from "@/app/types";
 import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const GameSkeleton = () => (
   <div className="backdrop-blur-lg bg-gradient-to-br from-red-500/10 to-purple-500/10 rounded-2xl p-4">
