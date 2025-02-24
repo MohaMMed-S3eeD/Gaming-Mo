@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import SwiperCards from "./SwiperCards";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,24 +16,10 @@ const GamesSwiper = ({
   slidesPerView?: number;
   big?: boolean;
 }) => {
-  const [gamesWishlist, setGamesWishlist] = useState<number[]>(() => {
-    // تحميل البيانات من localStorage عند تشغيل الكومبوننت
-    const storedWishlist = localStorage.getItem("gamesWishlist");
-    return storedWishlist ? JSON.parse(storedWishlist) : [];
-  });
+ 
 
-  const handleClick = (id: number) => {
-    setGamesWishlist((prevWishlist) =>
-      prevWishlist.includes(id)
-        ? prevWishlist.filter((game) => game !== id)
-        : [...prevWishlist, id]
-    );
-  };
 
   // حفظ البيانات في localStorage كل ما تتغير
-  useEffect(() => {
-   global?.window.localStorage.setItem("gamesWishlist", JSON.stringify(gamesWishlist));
-  }, [gamesWishlist]);
 
   return (
     <div>
@@ -67,29 +52,22 @@ const GamesSwiper = ({
                   </div>
                 </Link>
                 <Button
-                  onClick={() => handleClick(game.id)}
+                  onClick={() =>console.log("clicked")}
                   className={`mt-4 w-full transition-all duration-300 ${
-                    gamesWishlist.includes(game.id)
-                      ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400'
-                      : 'bg-purple-500/20 hover:bg-purple-500/30 text-purple-400'
+                   
+                      
+                      'bg-purple-500/20 hover:bg-purple-500/30 text-purple-400'
                   }`}
                 >
                   <span className="flex items-center gap-1 text-sm">
-                    {gamesWishlist.includes(game.id) ? (
-                      <>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                        <span className="truncate">Remove</span>
-                      </>
-                    ) : (
+                    
                       <>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                         </svg>
                         <span className="truncate">Add to Wishlist</span>
                       </>
-                    )}
+                   
                   </span>
                 </Button>
               </div>
@@ -130,29 +108,20 @@ const GamesSwiper = ({
                 {game.name}
               </h1>
               <Button
-                onClick={() => handleClick(game.id)}
+                onClick={() => console.log("clicked")}
                 className={`mt-4 w-full transition-all duration-300 ${
-                  gamesWishlist.includes(game.id)
-                    ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400'
-                    : 'bg-purple-500/20 hover:bg-purple-500/30 text-purple-400'
+                  'bg-purple-500/20 hover:bg-purple-500/30 text-purple-400'
                 }`}
               >
                 <span className="flex items-center gap-1 text-sm justify-center">
-                  {gamesWishlist.includes(game.id) ? (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                      <span className="truncate">Remove</span>
-                    </>
-                  ) : (
+                 
                     <>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                       </svg>
                       <span className="truncate">Add to Wishlist</span>
                     </>
-                  )}
+                
                 </span>
               </Button>
             </div>
